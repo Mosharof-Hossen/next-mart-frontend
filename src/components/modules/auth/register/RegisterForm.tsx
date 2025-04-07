@@ -10,13 +10,27 @@ import Logo from "@/app/assets/svgs/Logo";
 import Link from "next/link";
 import RegisterValidation from "./RegisterValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { registerUser } from "@/services/AuthServices";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
     const form = useForm({
         resolver: zodResolver(RegisterValidation),
     });
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    const { formState: { isSubmitting } } = form
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         console.log(data);
+        try {
+            const response = await registerUser(data);
+            console.log(response);
+            if (response === true) {
+                toast.success("User registered successfully");
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
     return <div className="w-full border border-gray-200 rounded-lg p-8 space-y-4">
         <div className="flex items-center gap-2">
@@ -94,7 +108,7 @@ const RegisterForm = () => {
                     />
                 </div>
 
-                <Button type="submit" className="w-full mt-4">Sign Up</Button>
+                <Button type="submit" className="w-full mt-4 cursor-pointer" disabled={isSubmitting}>{isSubmitting ? "Signing Up..." : "Sign Up"}</Button>
             </form>
         </Form>
         <p className="text-sm text-gray-500 text-center">Already have an account? <Link href="/login" className="text-blue-500">Login</Link></p>
