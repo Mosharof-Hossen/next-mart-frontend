@@ -80,3 +80,8 @@ export const verifyRecaptcha = async (token: string) => {
     }
 }
 
+export const logoutUser = async () => {
+    const cookieStore = await cookies();
+    cookieStore.delete("accessToken");
+}
+

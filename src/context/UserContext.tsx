@@ -6,6 +6,7 @@ interface IUserContext {
     user: IUser | null;
     setUser: (user: IUser | null) => void;
     isLoading: boolean;
+    setIsLoading: (isLoading: boolean) => void;
     handleSetUser: () => void;
 }
 
@@ -25,7 +26,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         handleSetUser();
     }, [isLoading]);
 
-    return <UserContext.Provider value={{ user, setUser, isLoading, handleSetUser }}>
+    return <UserContext.Provider value={{ user, setUser, setIsLoading, isLoading, handleSetUser }}>
         {children}
     </UserContext.Provider>;
 };
